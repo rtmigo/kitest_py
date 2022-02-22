@@ -2,7 +2,7 @@ import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from kitest._creator import _create_temp_project, verify_kotlin_sample_project
+from kitest._creator import _create_temp_project, check_kotlin_lib
 from kitest._errors import UnexpectedOutput
 
 
@@ -23,10 +23,10 @@ class TestOne(unittest.TestCase):
                 (project_root / "settings.gradle.kts").read_text())
 
     def test_verify(self):
-        verify_kotlin_sample_project(
-            package_name="io.github.rtmigo:kitestsample",
-            repo_url="https://github.com/rtmigo/kitest_sample_kotlin_lib_kt",
-            main_code="""
+        check_kotlin_lib(
+            dependency="io.github.rtmigo:kitestsample",
+            dependency_url="https://github.com/rtmigo/kitest_sample_kotlin_lib_kt",
+            main_kt="""
                 import io.github.rtmigo.kitestsample.*
                 fun main() = println(greet())
             """,
@@ -35,12 +35,11 @@ class TestOne(unittest.TestCase):
 
     def test_unexpected(self):
         with self.assertRaises(UnexpectedOutput):
-            verify_kotlin_sample_project(
-                package_name="io.github.rtmigo:kitestsample",
-                repo_url="https://github.com/rtmigo/kitest_sample_kotlin_lib_kt",
-                main_code="""
+            check_kotlin_lib(
+                dependency="io.github.rtmigo:kitestsample",
+                dependency_url="https://github.com/rtmigo/kitest_sample_kotlin_lib_kt",
+                main_kt="""
                     import io.github.rtmigo.kitestsample.*
                     fun main() = println(greet())
                 """,
-                expected_output="completely wrong"
-            )
+                expected_output="completely wrong")

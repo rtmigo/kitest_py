@@ -79,17 +79,17 @@ class TempProjectDir:
                 shutil.rmtree(self.path)
 
 
-def verify_kotlin_sample_project(main_code: str,
-                                 repo_url: str,
-                                 package_name: str,
-                                 expected_output: str,
-                                 temp_project_dir: Path = None):
+def check_kotlin_lib(main_kt: str,
+                     dependency_url: str,
+                     dependency: str,
+                     expected_output: str,
+                     temp_project_dir: Path = None):
     with TempProjectDir(temp_project_dir) as dst_dir:
         _create_temp_project(src_template_name="dependency_from_github",
                              dst_dir=dst_dir,
-                             replacements={"__PACKAGE__": package_name,
-                                           "__REPO_URL__": repo_url,
-                                           "__MAIN_KT__": main_code})
+                             replacements={"__PACKAGE__": dependency,
+                                           "__REPO_URL__": dependency_url,
+                                           "__MAIN_KT__": main_kt})
 
         output = _get_gradle_run_output(dst_dir)
         if output != expected_output:
