@@ -31,7 +31,7 @@ we create the following script:
 ```python3
 #!/usr/bin/env python3 
 
-from kitest import AppWithGitDependency
+from kitest import *
 
 with AppWithGitDependency(
         module="io.github.username:mylib",
@@ -42,7 +42,7 @@ with AppWithGitDependency(
             fun main() = println(spanishGreeting())
         """) as app:
     
-    if app.run().output.strip() != "¡Hola!":
+    if app.run().assert_output_is("¡Hola!\n"):
         exit(1)  # we are not happy with the result
 
 print("Everything is OK!")
