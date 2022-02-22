@@ -44,7 +44,7 @@ result = run_with_git_dependency(
     """)
 
 if result.text.strip() != "¡Hola!":  # stripped '\n'
-    exit(1)  # if we're not happy with the result
+    exit(1)  # we are not happy with the result
 
 print("Everything is OK!")  # and return code will be 0
 ```
