@@ -81,7 +81,8 @@ out will be returned in the result object.
 
 ## License
 
-Copyright © 2022 Artm Galkin <github.com/rtmigo>
+Copyright © 2022 
+Artem Galk  <github.com/rtmigo>
 
 Licensed under
 the [MIT License](https://github.com/rtmigo/kitest_py/blob/dev/LICENSE).
