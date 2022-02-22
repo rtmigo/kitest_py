@@ -26,7 +26,7 @@ setup(
 
     entry_points={
         'console_scripts': [
-            'kitest = kitest:__main__.dependency_from_github',
+            'kitest = kitest:__main__.cli',
         ]},
 
     keywords="".split(),
