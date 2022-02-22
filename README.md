@@ -4,26 +4,16 @@ The library is intentionally written in Python (although it tests Java/Kotlin).
 This
 way we avoid modifying the Java framework on a clean system.
 
-## Basic usage (in CI)
-
-To test a Kotlin library in CI, we create a testing script in Python for this
-library (for example, `lib_test.py`). And then we run the check like this:
-
-```commandline
-pip3 install pip3 install git+https://github.com/rtmigo/kitest_py#egg=kitest
-
-python3 lib_test.py
-```
-
 Examples of possible contents of `lib_test.py` are given below.
 
-## run_with_git_dependency
+## AppWithGitDependency
 
-Suppose we have created a library named `mylib`. The library is 
-located in the `https://github.com/username/mylib` repository and describes the 
-`io.github.username:mylib` module.
+Suppose we have created a Kotlin library named `mylib`. The library is 
+located in the `https://github.com/username/mylib` repository and implements 
+the `io.github.username:mylib` module.
 
-There is a Kotlin function `spanishGreeting` in out library, that returns `"¡Hola!"`
+There is a Kotlin function `spanishGreeting` in out library, that 
+returns `"¡Hola!"`
 
 To check if the library is successfully connected to third-party projects, 
 we create the following script: 
@@ -44,8 +34,7 @@ with AppWithGitDependency(
             fun main() = println(spanishGreeting())
         """) as app:
     
-    if app.run().assert_output_is("¡Hola!\n"):
-        exit(1)  # we are not happy with the result
+    app.run().assert_output_is("¡Hola!\n")
 
 print("Everything is OK!")
 ```
@@ -54,6 +43,7 @@ To run the test on a clean system, install `kitest` and run the script:
 
 ```bash
 # assuming pip and python are Python 3.10+
+# and lib_test.py is a local file
 
 pip install git+https://github.com/rtmigo/kitest_py
 python lib_test.py
