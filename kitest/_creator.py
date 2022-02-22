@@ -54,13 +54,7 @@ def _get_gradle_run_output(project_dir: Path) -> str:
     return result.stdout.decode()
 
 
-# def _is_non_empty_dir(path: Path) -> bool:
-#     if path.exists():
-#         return False
-#     return any(True for _ in path.rglob('*'))
-
-
-class TempDirRemover:
+class TempProjectDir:
     """When `path` is `None`, creates a temporary directory and removes it
     afterwards.
 
@@ -90,13 +84,13 @@ def verify_kotlin_sample_project(main_code: str,
                                  package_name: str,
                                  expected_output: str,
                                  temp_project_dir: Path = None):
-    with TempDirRemover(temp_project_dir) as temp_dir_autoremoved:
+    with TempProjectDir(temp_project_dir) as dst_dir:
         _create_temp_project(src_template_name="dependency_from_github",
-                             dst_dir=temp_dir_autoremoved,
+                             dst_dir=dst_dir,
                              replacements={"__PACKAGE__": package_name,
                                            "__REPO_URL__": repo_url,
                                            "__MAIN_KT__": main_code})
 
-        output = _get_gradle_run_output(temp_dir_autoremoved)
+        output = _get_gradle_run_output(dst_dir)
         if output != expected_output:
             raise UnexpectedOutput(output)
