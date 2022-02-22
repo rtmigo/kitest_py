@@ -23,30 +23,24 @@ class TestOne(unittest.TestCase):
                 (project_root / "settings.gradle.kts").read_text())
 
     def test_verify(self):
-        with TemporaryDirectory() as tds:
-            project_root = Path(tds) / "project"
+        verify_kotlin_sample_project(
+            package_name="io.github.rtmigo:kitestsample",
+            repo_url="https://github.com/rtmigo/kitest_sample_kotlin_lib_kt",
+            main_code="""
+                import io.github.rtmigo.kitestsample.*
+                fun main() = println(greet())
+            """,
+            expected_output="hello :)\n"
+        )
+
+    def test_unexpected(self):
+        with self.assertRaises(UnexpectedOutput):
             verify_kotlin_sample_project(
-                project_root,
                 package_name="io.github.rtmigo:kitestsample",
                 repo_url="https://github.com/rtmigo/kitest_sample_kotlin_lib_kt",
                 main_code="""
                     import io.github.rtmigo.kitestsample.*
                     fun main() = println(greet())
                 """,
-                expected_output="hello :)\n"
+                expected_output="completely wrong"
             )
-
-    def test_unexpected(self):
-        with self.assertRaises(UnexpectedOutput):
-            with TemporaryDirectory() as tds:
-                project_root = Path(tds) / "project"
-                verify_kotlin_sample_project(
-                    project_root,
-                    package_name="io.github.rtmigo:kitestsample",
-                    repo_url="https://github.com/rtmigo/kitest_sample_kotlin_lib_kt",
-                    main_code="""
-                        import io.github.rtmigo.kitestsample.*
-                        fun main() = println(greet())
-                    """,
-                    expected_output="completely wrong"
-                )
