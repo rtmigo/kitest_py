@@ -43,10 +43,10 @@ result = run_with_git_dependency(
         fun main() = println(spanishGreeting())
     """)
 
-if result.text != "¡Hola!\n":
-    exit(1)  # error code: we're not happy with the result
+if result.text.strip() != "¡Hola!":  # stripped '\n'
+    exit(1)  # if we're not happy with the result
 
-# no errors
+print("Everything is OK!")  # and return code will be 0
 ```
 
 To run the test on a clean system, install `kitest` and run the script:
