@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: (c) 2022 Artem Galk <github.com/rtmigo>
+# SPDX-FileCopyrightText: (c) 2022 Artem Galk <rtmigo.github.io>
 # SPDX-License-Identifier: MIT
 
 class GradleRunFailed (Exception):
