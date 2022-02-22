@@ -2,8 +2,7 @@ import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from kitest._creator import _create_temp_project, check_kotlin_lib
-from kitest._errors import UnexpectedOutput
+from kitest._creator import _create_temp_project, run_with_git_dependency
 
 
 class TestOne(unittest.TestCase):
@@ -23,23 +22,15 @@ class TestOne(unittest.TestCase):
                 (project_root / "settings.gradle.kts").read_text())
 
     def test_verify(self):
-        check_kotlin_lib(
+        result = run_with_git_dependency(
             dependency="io.github.rtmigo:kitestsample",
             dependency_url="https://github.com/rtmigo/kitest_sample_kotlin_lib_kt",
             main_kt="""
                 import io.github.rtmigo.kitestsample.*
                 fun main() = println(greet())
             """,
-            expected_output="hello :)\n"
-        )
 
-    def test_unexpected(self):
-        with self.assertRaises(UnexpectedOutput):
-            check_kotlin_lib(
-                dependency="io.github.rtmigo:kitestsample",
-                dependency_url="https://github.com/rtmigo/kitest_sample_kotlin_lib_kt",
-                main_kt="""
-                    import io.github.rtmigo.kitestsample.*
-                    fun main() = println(greet())
-                """,
-                expected_output="completely wrong")
+        )
+        self.assertEqual(
+            result.text, "hello :)\n"
+        )

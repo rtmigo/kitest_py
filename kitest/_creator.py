@@ -4,7 +4,7 @@ import tempfile
 from pathlib import Path
 from typing import Optional
 
-from kitest._errors import GradleRunFailed, UnexpectedOutput
+from kitest._errors import GradleRunFailed
 
 
 def _replace_in_string(text: str, replacements: dict[str, str]) -> str:
@@ -71,7 +71,7 @@ class TempProjectDir:
         if self.path is None:
             self.path = Path(tempfile.mkdtemp())
             self.autoremove = True
-        return self.path/"temp_project"
+        return self.path / "temp_project"
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.autoremove:
@@ -79,11 +79,15 @@ class TempProjectDir:
                 shutil.rmtree(self.path)
 
 
-def check_kotlin_lib(main_kt: str,
-                     dependency_url: str,
-                     dependency: str,
-                     expected_output: str,
-                     temp_project_dir: Path = None):
+class RunResult:
+    def __init__(self, text: str):
+        self.text = text
+
+
+def run_with_git_dependency(main_kt: str,
+                            dependency_url: str,
+                            dependency: str,
+                            temp_project_dir: Path = None) -> RunResult:
     with TempProjectDir(temp_project_dir) as dst_dir:
         _create_temp_project(src_template_name="dependency_from_github",
                              dst_dir=dst_dir,
@@ -92,5 +96,4 @@ def check_kotlin_lib(main_kt: str,
                                            "__MAIN_KT__": main_kt})
 
         output = _get_gradle_run_output(dst_dir)
-        if output != expected_output:
-            raise UnexpectedOutput(output)
+        return RunResult(text=output)
