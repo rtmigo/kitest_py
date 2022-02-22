@@ -23,9 +23,9 @@ located in the `https://github.com/username/mylib` repository and describes the
 `io.github.username:mylib` module.
 
 To check if the library is successfully connected to third-party projects, 
-we create the following script:
+we create the following script: 
 
-### lib_test.py
+#### lib_test.py (or any name you like)
 
 ```python3
 #!/usr/bin/env python3 
