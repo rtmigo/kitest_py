@@ -14,6 +14,7 @@ setup(
     author_email="ortemeo@gmail.com",
 
     packages=find_packages(include=['kitest', 'kitest.*']),
+    package_data={'kitest': ['data' + ('/*' * i) for i in range(20)]},
 
     python_requires='>=3.10',
     install_requires=[],
@@ -23,12 +24,7 @@ setup(
 
     license="MIT",
 
-    entry_points={
-        'console_scripts': [
-            'kitest = kitest:__main__.cli',
-        ]},
-
-    keywords="".split(),
+    keywords="testing kotlin java library ci integration".split(),
 
     classifiers=[
         "Programming Language :: Python :: 3.10",
