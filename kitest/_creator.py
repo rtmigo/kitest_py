@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 from __future__ import annotations
+
 import shutil
 import subprocess
 import tempfile
@@ -89,8 +90,8 @@ class RunResult:
     def __init__(self, text: str):
         self.output = text
 
-    def expect_output(self, expected: str):
-        if self.output!=expected:
+    def assert_output_is(self, expected: str):
+        if self.output != expected:
             raise UnexpectedOutput(self.output)
 
 
@@ -126,7 +127,7 @@ class AppWithGitDependency:
     def project_dir(self) -> Path:
         if self._temp_dir is None:
             raise Exception("Unavailable")
-        return self._temp_dir/"project"
+        return self._temp_dir / "project"
 
     def __enter__(self) -> AppWithGitDependency:
         self._temp_dir = Path(tempfile.mkdtemp())
@@ -139,8 +140,6 @@ class AppWithGitDependency:
     def run(self) -> RunResult:
         output = _get_gradle_run_output(self.project_dir)
         return RunResult(text=output)
-
-
 
 #
 #
