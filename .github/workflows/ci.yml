@@ -32,22 +32,26 @@ jobs:
           java-version: '8'
           distribution: 'adopt'
           cache: gradle
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
+
       - name: Install Python dependencies
         run: |
           #git config --global url."https://${{ secrets.PRIVATE_REPOS_TOKEN }}@github".insteadOf https://github
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Run unit tests
-        run: |
-          python ./test.py unit
+
       - name: Lint
         if: matrix.os == 'ubuntu-latest'
         run: |
           python ./test.py lint
+
+      - name: 'Run unit tests (slow: involves Gradle builds)'
+        run: |
+          python ./test.py unit
 
 
   test-pkg:
