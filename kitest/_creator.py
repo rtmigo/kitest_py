@@ -8,7 +8,7 @@ import tempfile
 from pathlib import Path
 from typing import Optional
 
-from kitest._errors import GradleRunFailed
+from kitest._errors import GradleRunFailed, UnexpectedOutput
 
 
 def _replace_in_string(text: str, replacements: dict[str, str]) -> str:
@@ -89,6 +89,10 @@ class RunResult:
     def __init__(self, text: str):
         self.output = text
 
+    def expect_output(self, expected: str):
+        if self.output!=expected:
+            raise UnexpectedOutput(self.output)
+
 
 class AppWithGitDependency:
     def __init__(self,
@@ -135,6 +139,8 @@ class AppWithGitDependency:
     def run(self) -> RunResult:
         output = _get_gradle_run_output(self.project_dir)
         return RunResult(text=output)
+
+
 
 #
 #
