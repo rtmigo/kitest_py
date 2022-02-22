@@ -47,7 +47,7 @@ if result.text!="myLibFunc output\n":
     exit(1)
 ```
 
-To run the test on a test system, install kitest and run the script:
+To run the test on a clean system, install `kitest` and run the script:
 
 ```commandline
 pip3 install pip3 install git+https://github.com/rtmigo/kitest_py#egg=kitest
