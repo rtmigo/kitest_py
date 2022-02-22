@@ -1,6 +1,7 @@
 Tool for testing Kotlin libraries. I use it to test my own code.
 
-The library is intentionally written in Python (although it tests Java). This
+The library is intentionally written in Python (although it tests Java/Kotlin). 
+This
 way we avoid modifying the Java framework on a clean system.
 
 ## Basic usage (in CI)
