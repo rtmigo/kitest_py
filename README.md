@@ -34,16 +34,16 @@ we create the following script:
 from kitest import run_with_git_dependency
 
 result = run_with_git_dependency(
-    dependency="io.github.username:mylib",
-    dependency_url="https://github.com/username/mylib",
+    module="io.github.username:mylib",
+    url="https://github.com/username/mylib",
     main_kt="""
         // kotlin code that imports and uses the library        
 
-        import io.github.username:mylib.myLibFunc
-        fun main() = println(myLibFunc())
+        import io.github.username:mylib.myLibFunk
+        fun main() = println(myLibFunk())
     """)
 
-if result.text!="myLibFunc output\n":
+if result.text != "myLibFunk output\n":
     exit(1)
 ```
 

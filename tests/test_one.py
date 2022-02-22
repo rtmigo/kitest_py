@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: (c) 2022 Artёm IG <github.com/rtmigo>
+# SPDX-License-Identifier: MIT
+
 import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -23,8 +26,8 @@ class TestOne(unittest.TestCase):
 
     def test_verify(self):
         result = run_with_git_dependency(
-            dependency="io.github.rtmigo:kitestsample",
-            dependency_url="https://github.com/rtmigo/kitest_sample_kotlin_lib_kt",
+            module="io.github.rtmigo:kitestsample",
+            url="https://github.com/rtmigo/kitest_sample_kotlin_lib_kt",
             main_kt="""
                 import io.github.rtmigo.kitestsample.*
                 fun main() = println(greet())

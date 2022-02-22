@@ -24,12 +24,7 @@ setup(
 
     license="MIT",
 
-    entry_points={
-        'console_scripts': [
-            'kitest = kitest:__main__.cli',
-        ]},
-
-    keywords="".split(),
+    keywords="testing kotlin java library ci integration".split(),
 
     classifiers=[
         "Programming Language :: Python :: 3.10",

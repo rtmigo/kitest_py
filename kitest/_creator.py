@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: (c) 2022 Artёm IG <github.com/rtmigo>
+# SPDX-License-Identifier: MIT
+
 import shutil
 import subprocess
 import tempfile
@@ -85,14 +88,14 @@ class RunResult:
 
 
 def run_with_git_dependency(main_kt: str,
-                            dependency_url: str,
-                            dependency: str,
+                            url: str,
+                            module: str,
                             temp_project_dir: Path = None) -> RunResult:
     with TempProjectDir(temp_project_dir) as dst_dir:
         _create_temp_project(src_template_name="dependency_from_github",
                              dst_dir=dst_dir,
-                             replacements={"__PACKAGE__": dependency,
-                                           "__REPO_URL__": dependency_url,
+                             replacements={"__PACKAGE__": module,
+                                           "__REPO_URL__": url,
                                            "__MAIN_KT__": main_kt})
 
         output = _get_gradle_run_output(dst_dir)
