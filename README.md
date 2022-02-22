@@ -25,7 +25,7 @@ located in the `https://github.com/username/mylib` repository and describes the
 To check if the library is successfully connected to third-party projects, 
 we create the following script:
 
-#### lib_test.py
+### lib_test.py
 
 ```python3
 #!/usr/bin/env python3 
@@ -38,7 +38,7 @@ result = run_with_git_dependency(
     main_kt="""
         // kotlin code that imports and uses the library        
 
-        import io.github.user:mylib.myLibFunc
+        import io.github.username:mylib.myLibFunc
         fun main() = println(myLibFunc())
     """)
 
@@ -46,7 +46,7 @@ if result.text!="myLibFunc output\n":
     exit(1)
 ```
 
-Run in CI:
+To run the test on a test system, install kitest and run the script:
 
 ```commandline
 pip3 install pip3 install git+https://github.com/rtmigo/kitest_py#egg=kitest
