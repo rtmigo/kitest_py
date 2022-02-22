@@ -51,10 +51,12 @@ print("Everything is OK!")  # and return code will be 0
 
 To run the test on a clean system, install `kitest` and run the script:
 
-```commandline
-pip3 install pip3 install git+https://github.com/rtmigo/kitest_py#egg=kitest
+```bash
+# assuming Python 3.10+ is installed
 
-python3 lib_test.py
+pip install -U pip
+pip install -U git+https://github.com/rtmigo/kitest_py
+python lib_test.py
 ```
 
 ### Under the hood
