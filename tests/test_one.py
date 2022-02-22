@@ -52,7 +52,7 @@ class TestOne(unittest.TestCase):
     def test_run(self):
         with AppWithGitDependency(
                 module="io.github.rtmigo:kitestsample",
-                url="https://rtmigo.github.io/kitest_sample_kotlin_lib_kt",
+                url="https://github.com/rtmigo/kitest_sample_kotlin_lib_kt",
                 main_kt="""
                 import io.github.rtmigo.kitestsample.*
                 fun main() = println(greet())
