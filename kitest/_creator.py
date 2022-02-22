@@ -27,10 +27,10 @@ def _replace_in_dir(parent: Path, replacements: dict[str, str]):
             new_text = _replace_in_string(old_text, replacements)
             if new_text != old_text:
                 p.write_text(new_text)
-                print(_header(p.name))
-                print(new_text)
-                print(_header("/" + p.name))
-                print()
+            print(_header(p))
+            print(p.read_text())
+            print(_header("/" + p))
+            print()
 
 
 def _create_temp_project(src_template_name: str,
