@@ -1,6 +1,10 @@
 import shutil
 import subprocess
+import tempfile
 from pathlib import Path
+from typing import Optional
+
+from kitest._errors import GradleRunFailed, UnexpectedOutput
 
 
 def _replace_in_string(text: str, replacements: dict[str, str]) -> str:
@@ -50,27 +54,42 @@ def _get_gradle_run_output(project_dir: Path) -> str:
     return result.stdout.decode()
 
 
-class GradleRunFailed(SystemExit):
-    def __init__(self, msg):
-        super().__init__(msg)
+class TempDirRemover:
+    """When `path` is `None`, creates a temporary directory and removes it
+    afterwards.
+
+    When `path` is not `None`, does nothing with the path.
+    """
+    def __init__(self, path: Optional[Path]):
+        self.autoremove = False
+        self.path: Optional[Path] = path
+
+    def __enter__(self) -> Path:
+        if self.path is not None and self.path.exists():
+            raise FileExistsError(self.path)
+        if self.path is None:
+            self.path = Path(tempfile.mkdtemp())
+            self.autoremove = True
+        return self.path
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.autoremove:
+            if self.path.exists():
+                shutil.rmtree(self.path)
 
 
-class UnexpectedOutput(SystemExit):
-    def __init__(self, msg):
-        super().__init__(msg)
-
-
-def verify_kotlin_sample_project(project_dir: Path,
-                                 main_code: str,
+def verify_kotlin_sample_project(main_code: str,
                                  repo_url: str,
                                  package_name: str,
-                                 expected_output: str):
-    _create_temp_project(src_template_name="dependency_from_github",
-                         dst_dir=project_dir,
-                         replacements={"__PACKAGE__": package_name,
-                                       "__REPO_URL__": repo_url,
-                                       "__MAIN_KT__": main_code})
+                                 expected_output: str,
+                                 temp_project_dir: Path = None):
+    with TempDirRemover(temp_project_dir) as temp_dir_autoremoved:
+        _create_temp_project(src_template_name="dependency_from_github",
+                             dst_dir=temp_dir_autoremoved,
+                             replacements={"__PACKAGE__": package_name,
+                                           "__REPO_URL__": repo_url,
+                                           "__MAIN_KT__": main_code})
 
-    output = _get_gradle_run_output(project_dir)
-    if output != expected_output:
-        raise UnexpectedOutput(output)
+        output = _get_gradle_run_output(temp_project_dir)
+        if output != expected_output:
+            raise UnexpectedOutput(output)

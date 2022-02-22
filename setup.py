@@ -14,6 +14,7 @@ setup(
     author_email="ortemeo@gmail.com",
 
     packages=find_packages(include=['kitest', 'kitest.*']),
+    package_data={'kitest': ['data/**/*']},
 
     python_requires='>=3.10',
     install_requires=[],

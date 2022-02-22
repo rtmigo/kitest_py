@@ -2,8 +2,8 @@ import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from kitest._creator import _create_temp_project, verify_kotlin_sample_project, \
-    UnexpectedOutput
+from kitest._creator import _create_temp_project, verify_kotlin_sample_project
+from kitest._errors import UnexpectedOutput
 
 
 class TestOne(unittest.TestCase):
