@@ -5,4 +5,3 @@ if __name__ == "__main__":
         pkg.run_shell_code('kitest --help')
 
     print("\nPackage is OK!")
-

@@ -12,7 +12,7 @@ class TestOne(unittest.TestCase):
             project_root = Path(tds) / "project"
 
             _create_temp_project(
-                src_template_name="cli",
+                src_template_name="dependency_from_github",
                 dst_dir=project_root,
                 replacements={
                     "__PACKAGE__": "org.sample.package",
