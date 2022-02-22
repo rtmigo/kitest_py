@@ -23,6 +23,8 @@ Suppose we have created a library named `mylib`. The library is
 located in the `https://github.com/username/mylib` repository and describes the 
 `io.github.username:mylib` module.
 
+There is a Kotlin function `spanishGreeting` in out library, that returns `"¡Hola!"`
+
 To check if the library is successfully connected to third-party projects, 
 we create the following script: 
 
