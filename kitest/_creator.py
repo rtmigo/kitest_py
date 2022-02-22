@@ -16,8 +16,8 @@ def _replace_in_string(text: str, replacements: dict[str, str]) -> str:
     return text
 
 
-def _header(txt: str) -> str:
-    return f"<{txt}> ".ljust(80, '-')
+def _header(txt: str, c: str) -> str:
+    return f"{c}{c} {txt} ".ljust(80, c)
 
 
 def _replace_in_dir(parent: Path, replacements: dict[str, str]):
@@ -27,9 +27,11 @@ def _replace_in_dir(parent: Path, replacements: dict[str, str]):
             new_text = _replace_in_string(old_text, replacements)
             if new_text != old_text:
                 p.write_text(new_text)
-            print(_header(p))
+
+            tag_name = str(Path("project")/p.relative_to(parent))
+            print(_header(tag_name+" begin", '>'))
             print(p.read_text())
-            print(_header("/" + str(p)))
+            print(_header(tag_name+" end", '<'))
             print()
 
 
