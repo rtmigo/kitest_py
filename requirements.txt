@@ -1,5 +1,8 @@
 -e .
 
 neatest
-mypy
+
 chkpkg
+
+# 2022-02 Нужно для поддержки `mathch`. Станет нектуально, когда mypy 0.940 на PyPi
+git+git://github.com/python/mypy.git@9b3147701f054bf8ef42bd96e33153b05976a5e1
