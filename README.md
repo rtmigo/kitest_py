@@ -31,31 +31,29 @@ we create the following script:
 ```python3
 #!/usr/bin/env python3 
 
-from kitest import run_with_git_dependency
+from kitest import AppWithGitDependency
 
-result = run_with_git_dependency(
-    module="io.github.username:mylib",
-    url="https://github.com/username/mylib",
-    main_kt="""
-        // kotlin code that imports and uses the library        
+with AppWithGitDependency(
+        module="io.github.username:mylib",
+        url="https://github.com/username/mylib",
+        main_kt="""
+            // kotlin code that imports and uses the library        
+            import io.github.username:mylib.spanishGreeting
+            fun main() = println(spanishGreeting())
+        """) as app:
+    
+    if app.run().output.strip() != "¡Hola!":
+        exit(1)  # we are not happy with the result
 
-        import io.github.username:mylib.spanishGreeting
-        fun main() = println(spanishGreeting())
-    """)
-
-if result.text.strip() != "¡Hola!":  # stripped '\n'
-    exit(1)  # we are not happy with the result
-
-print("Everything is OK!")  # and return code will be 0
+print("Everything is OK!")
 ```
 
 To run the test on a clean system, install `kitest` and run the script:
 
 ```bash
-# assuming Python 3.10+ is installed
+# assuming pip and python are Python 3.10+
 
-pip install -U pip
-pip install -U git+https://github.com/rtmigo/kitest_py
+pip install git+https://github.com/rtmigo/kitest_py
 python lib_test.py
 ```
 

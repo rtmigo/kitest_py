@@ -5,11 +5,11 @@ import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from kitest._creator import _create_temp_project, run_with_git_dependency
+from kitest._creator import _create_temp_project, AppWithGitDependency
 
 
 class TestOne(unittest.TestCase):
-    def test(self):
+    def test_create_temp_project(self):
         with TemporaryDirectory() as tds:
             project_root = Path(tds) / "project"
 
@@ -24,16 +24,40 @@ class TestOne(unittest.TestCase):
                 "https://github.com/user/repo",
                 (project_root / "settings.gradle.kts").read_text())
 
-    def test_verify(self):
-        result = run_with_git_dependency(
-            module="io.github.rtmigo:kitestsample",
-            url="https://github.com/rtmigo/kitest_sample_kotlin_lib_kt",
-            main_kt="""
+    def test_app_git_staging_branch(self):
+        with AppWithGitDependency(
+                module="io.github.user:repo",
+                url="https://github.com/user/repo",
+                branch="staging",
+                main_kt="""
+                    import io.github.user.repo.*
+                    fun main() = println(something())
+                """) as app:
+            self.assertIn(
+                """{ version { branch = "staging" } }""",
+                (app.project_dir / "build.gradle.kts").read_text())
+
+    def test_app_git_no_branch(self):
+        with AppWithGitDependency(
+                module="io.github.user:repo",
+                url="https://github.com/user/repo",
+                main_kt="""
+                    import io.github.user.repo.*
+                    fun main() = println(something())
+                """) as app:
+            self.assertNotIn(
+                "branch",
+                (app.project_dir / "build.gradle.kts").read_text())
+
+    def test_run(self):
+        with AppWithGitDependency(
+                module="io.github.rtmigo:kitestsample",
+                url="https://github.com/rtmigo/kitest_sample_kotlin_lib_kt",
+                main_kt="""
                 import io.github.rtmigo.kitestsample.*
                 fun main() = println(greet())
-            """,
-
-        )
+            """) as app:
+            result = app.run()
         self.assertEqual(
-            result.text, "hello :)\n"
+            result.output, "hello :)\n"
         )

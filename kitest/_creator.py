@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: (c) 2022 Artёm IG <github.com/rtmigo>
 # SPDX-License-Identifier: MIT
 
+from __future__ import annotations
 import shutil
 import subprocess
 import tempfile
@@ -28,10 +29,10 @@ def _replace_in_dir(parent: Path, replacements: dict[str, str]):
             if new_text != old_text:
                 p.write_text(new_text)
 
-            tag_name = str(Path("project")/p.relative_to(parent))
-            print(_header(tag_name+" begin", '>'))
+            tag_name = str(Path("project") / p.relative_to(parent))
+            print(_header(tag_name + " begin", '>'))
             print(p.read_text())
-            print(_header(tag_name+" end", '<'))
+            print(_header(tag_name + " end", '<'))
             print()
 
 
@@ -59,46 +60,102 @@ def _get_gradle_run_output(project_dir: Path) -> str:
     return result.stdout.decode()
 
 
-class TempProjectDir:
-    """When `path` is `None`, creates a temporary directory and removes it
-    afterwards.
-
-    When `path` is not `None`, does nothing with the path.
-    """
-
-    def __init__(self, path: Optional[Path]):
-        self.autoremove = False
-        self.path: Optional[Path] = path
-
-    def __enter__(self) -> Path:
-        if self.path is not None and self.path.exists():
-            raise FileExistsError(self.path)
-        if self.path is None:
-            self.path = Path(tempfile.mkdtemp())
-            self.autoremove = True
-        return self.path / "temp_project"
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        if self.autoremove:
-            if self.path.exists():
-                shutil.rmtree(self.path)
+# class TempProjectDir:
+#     """When `path` is `None`, creates a temporary directory and removes it
+#     afterwards.
+#
+#     When `path` is not `None`, does nothing with the path.
+#     """
+#
+#     def __init__(self, path: Optional[Path]):
+#         self.autoremove = False
+#         self.path: Optional[Path] = path
+#
+#     def __enter__(self) -> Path:
+#         if self.path is not None and self.path.exists():
+#             raise FileExistsError(self.path)
+#         if self.path is None:
+#             self.path = Path(tempfile.mkdtemp())
+#             self.autoremove = True
+#         return self.path / "temp_project"
+#
+#     def __exit__(self, exc_type, exc_val, exc_tb):
+#         if self.autoremove:
+#             if self.path.exists():
+#                 shutil.rmtree(self.path)
 
 
 class RunResult:
     def __init__(self, text: str):
-        self.text = text
+        self.output = text
 
 
-def run_with_git_dependency(main_kt: str,
-                            url: str,
-                            module: str,
-                            temp_project_dir: Path = None) -> RunResult:
-    with TempProjectDir(temp_project_dir) as dst_dir:
+class AppWithGitDependency:
+    def __init__(self,
+                 main_kt: str,
+                 url: str,
+                 module: str,
+                 branch: Optional[str] = None):
+        self.main_kt = main_kt
+        self.url = url
+        self.module = module
+        self.branch = branch
+        self._temp_dir: Optional[Path] = None
+
+    def _create(self, dst_dir: Path):
+        details = ""
+        # implementation("io.github.rtmigo:repr") { version { branch = "dev" } }
+        if self.branch is not None:
+            details = """{ version { branch = "__BRANCH__" } }""" \
+                .replace("__BRANCH__", self.branch)
+
         _create_temp_project(src_template_name="dependency_from_github",
                              dst_dir=dst_dir,
-                             replacements={"__PACKAGE__": module,
-                                           "__REPO_URL__": url,
-                                           "__MAIN_KT__": main_kt})
+                             replacements={
+                                 "__PACKAGE__": self.module,
+                                 "__REPO_URL__": self.url,
+                                 "__MAIN_KT__": self.main_kt,
+                                 "__IMPLEMENTATION_DETAILS__": details
+                             })
 
-        output = _get_gradle_run_output(dst_dir)
+    @property
+    def project_dir(self) -> Path:
+        if self._temp_dir is None:
+            raise Exception("Unavailable")
+        return self._temp_dir/"project"
+
+    def __enter__(self) -> AppWithGitDependency:
+        self._temp_dir = Path(tempfile.mkdtemp())
+        self._create(self.project_dir)
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        shutil.rmtree(self._temp_dir)
+
+    def run(self) -> RunResult:
+        output = _get_gradle_run_output(self.project_dir)
         return RunResult(text=output)
+
+#
+#
+# def run_with_git_dependency(main_kt: str,
+#                             url: str,
+#                             module: str,
+#                             branch: Optional[str] = None,
+#                             temp_project_dir: Path = None) -> RunResult:
+#     details = 0
+#     # implementation("io.github.rtmigo:repr") { version { branch = "dev" } }
+#     if branch is not None:
+#         details = """{ version { branch = "BRA" } }""".replace("BRANCH", branch)
+#
+#     with TempProjectDir(temp_project_dir) as dst_dir:
+#         _create_temp_project(src_template_name="dependency_from_github",
+#                              dst_dir=dst_dir,
+#                              replacements={"__PACKAGE__": module,
+#                                            "__REPO_URL__": url,
+#                                            "__MAIN_KT__": main_kt,
+#                                            "__IMPLEMENTATION_DETAILS__": details
+#                                            })
+#
+#         output = _get_gradle_run_output(dst_dir)
+#         return RunResult(text=output)

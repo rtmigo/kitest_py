@@ -7,5 +7,5 @@ repositories { mavenCentral() }
 application { mainClass.set("MainKt") }
 
 dependencies {
-    implementation("__PACKAGE__")
+    implementation("__PACKAGE__") __IMPLEMENTATION_DETAILS__
 }
