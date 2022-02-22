@@ -1,4 +1,4 @@
-Tool for testing Kotlin libraries. I use it to test my own code. I don't recommend it :)
+Tool for testing Kotlin libraries. I use it to test my own code.
 
 The library is intentionally written in Python (although it tests Java). This way we avoid modifying the Java framework on a clean system.
 
@@ -7,8 +7,7 @@ The library is intentionally written in Python (although it tests Java). This wa
 ## Basic usage (in CI)
 
 To test a Kotlin library in CI, we create a testing script in Python for this 
-library 
-(for example, `my_test.py`). And then we run the check like this:
+library (for example, `my_test.py`). And then we run the check like this:
 
 
 ```commandline
@@ -19,10 +18,7 @@ python3 my_test.py
 
 ## check_kotlin_lib 
 
-The following code can be used to check whether a Kotlin/Java library can be 
-installed from GitHub repository.
-
-Creates a mini-project of a console application ("miniApp") that includes a 
+Creates a mini-project of a console application **miniApp** that includes a 
 dependent library like this:
 
 #### miniApp / settings.gradle.kts
@@ -43,7 +39,7 @@ implementation("io.github.username:mylib")
 
 To call the function and check on our library, we run the following code:
 
-#### ourLib / test_as_dependency.py
+#### ourLib / test_as_dependency.py (or any script name you like)
 
 ```python3
 #!/usr/bin/env python3 
@@ -56,7 +52,7 @@ check_kotlin_lib(
         import io.github.user:mylib.myLibFunc
         fun main() = println(myLibFunc())
     """,
-    expected_output="the output")
+    expected_output="myLibFunc output")
 ```
 
 To run the check in CI:
