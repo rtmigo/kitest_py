@@ -39,12 +39,14 @@ result = run_with_git_dependency(
     main_kt="""
         // kotlin code that imports and uses the library        
 
-        import io.github.username:mylib.myLibFunk
-        fun main() = println(myLibFunk())
+        import io.github.username:mylib.spanishGreeting
+        fun main() = println(spanishGreeting())
     """)
 
-if result.text != "myLibFunk output\n":
-    exit(1)
+if result.text != "¡Hola!\n":
+    exit(1)  # error code: we're not happy with the result
+
+# no errors
 ```
 
 To run the test on a clean system, install `kitest` and run the script:
