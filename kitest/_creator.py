@@ -29,7 +29,7 @@ def _replace_in_dir(parent: Path, replacements: dict[str, str]):
                 p.write_text(new_text)
             print(_header(p))
             print(p.read_text())
-            print(_header("/" + p))
+            print(_header("/" + str(p)))
             print()
 
 
