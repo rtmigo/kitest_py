@@ -5,15 +5,16 @@ import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from kitest._creator import _create_temp_project, AppWithGitDependency
+from kitest._app import AppWithGitDependency
+from kitest._dir_from_template import create_temp_project
 
 
-class TestOne(unittest.TestCase):
+class TestCreateProject(unittest.TestCase):
     def test_create_temp_project(self):
         with TemporaryDirectory() as tds:
             project_root = Path(tds) / "project"
 
-            _create_temp_project(
+            create_temp_project(
                 src_template_name="dependency_from_github",
                 dst_dir=project_root,
                 replacements={
@@ -23,6 +24,9 @@ class TestOne(unittest.TestCase):
             self.assertIn(
                 "https://github.com/user/repo",
                 (project_root / "settings.gradle.kts").read_text())
+
+
+class TestAppGit(unittest.TestCase):
 
     def test_app_git_staging_branch(self):
         with AppWithGitDependency(
@@ -54,10 +58,8 @@ class TestOne(unittest.TestCase):
                 module="io.github.rtmigo:kitestsample",
                 url="https://github.com/rtmigo/kitest_sample_kotlin_lib_kt",
                 main_kt="""
-                import io.github.rtmigo.kitestsample.*
-                fun main() = println(greet())
-            """) as app:
+                    import io.github.rtmigo.kitestsample.*
+                    fun main() = println(greet())
+                """) as app:
             result = app.run()
-        self.assertEqual(
-            result.output, "hello :)\n"
-        )
+        self.assertEqual(result.stdout, "hello :)\n")
