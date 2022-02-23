@@ -6,7 +6,7 @@ name = "kitest"
 
 setup(
     name=name,
-    version="0.0.0",
+    version="0.1.0",
 
     author="Artёm IG",
     author_email="ortemeo@gmail.com",

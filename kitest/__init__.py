@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: MIT
 
 from pathlib import Path
-from ._app import AppWithGitDependency, RunResult, UnexpectedOutput
-from ._draft import TempKotlinApp
+from ._obsolete_app_with_git_dep import AppWithGitDependency, RunResult, UnexpectedOutput
+from ._temp_kotlin_app import TempKotlinApp
 
 assert (Path(__file__).parent/"data").exists()
 assert (Path(__file__).parent/"data"/"dependency_from_github").exists()

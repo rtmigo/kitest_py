@@ -13,7 +13,7 @@ avoid modifying the Java framework on a testing system.
 ## TempKotlinApp
 
 Suppose you have created a Kotlin library named `mylib`. The library contains 
-function `spanishGreeting`, that returns `"¡Hola!"`
+function `spanishGreeting`, that returns `"¡Hola!"`.
 
 You need to test that third-party projects can use `mylib` as a 
 dependency.
