@@ -3,6 +3,7 @@
 
 from pathlib import Path
 from ._app import AppWithGitDependency, RunResult, UnexpectedOutput
+from ._draft import TempKotlinApp
 
 assert (Path(__file__).parent/"data").exists()
 assert (Path(__file__).parent/"data"/"dependency_from_github").exists()

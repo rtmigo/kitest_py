@@ -5,37 +5,49 @@
 
 # [kitest](https://github.com/rtmigo/kitest_py)
 
-
-
 Tool for testing Kotlin libraries.
 
-The library is intentionally written in Python (although it tests Java/Kotlin). 
-This way we avoid modifying the Java framework on a clean system.
+`kitest` is written in Python (although it tests Java/Kotlin). This way we 
+avoid modifying the Java framework on a testing system.
 
-## AppWithGitDependency
+## TempKotlinApp
 
-Suppose you have created a Kotlin library named `mylib`. Full module name is
-`io.github.username:mylib`. It is located in the `https://github.com/username/mylib` 
-repository.
-
-The library contains function `spanishGreeting`, that returns `"¡Hola!"`
+Suppose you have created a Kotlin library named `mylib`. The library contains 
+function `spanishGreeting`, that returns `"¡Hola!"`
 
 You need to test that third-party projects can use `mylib` as a 
-dependency, downloading it directly from GitHub.
+dependency.
 
-
-Create the following script: 
+The test can be run by creating a file like this:
 
 #### lib_test.py (or any name you like)
 
 ```python3
-#!/usr/bin/env python3 
-
 from kitest import *
 
-with AppWithGitDependency(
-        module="io.github.username:mylib",
-        url="https://github.com/username/mylib",
+with TempKotlinApp(
+        build_gradle_kts="""
+            plugins {
+                id("application")
+                kotlin("jvm") version "1.6.10"
+            }
+            
+            repositories { mavenCentral() }
+            application { mainClass.set("MainKt") }
+            
+            dependencies {
+                implementation("io.github.username:mylib")
+            }            
+        """,
+        
+        settings_gradle_kts="""
+            sourceControl {
+                gitRepository(java.net.URI("https://github.com/username/mylib.git")) {
+                    producesModule("io.github.username:mylib")
+                }
+            }            
+        """,
+        
         main_kt="""
             // kotlin code that imports and uses the library        
             import io.github.username:mylib.spanishGreeting
@@ -59,26 +71,8 @@ python lib_test.py
 
 ### Under the hood
 
-It will create a small TestApp, that is a console application in Kotlin. TestApp
-will use your library like this:
-
-#### TestApp / settings.gradle.kts
-
-```kotlin
-sourceControl {
-    gitRepository(java.net.URI("https://github.com/username/mylib.git")) {
-        producesModule("io.github.username:mylib")
-    }
-}
-```
-
-#### TestApp / build.gradle.kts
-
-```kotlin
-implementation("io.github.username:mylib")
-```
-
-The program will be executed with `gradle run -q`. Whatever the program prints
+It will create a small app in a temporary directory. The program will be 
+executed with `gradle run -q`. Whatever the program prints
 out will be returned in the result object.
 
 ## License
