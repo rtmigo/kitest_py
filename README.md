@@ -1,4 +1,13 @@
-Tool for testing Kotlin libraries. I use it to test my own code.
+![Generic badge](https://img.shields.io/badge/stability-experimental-red.svg)
+![Generic badge](https://img.shields.io/badge/python-3.10+-blue.svg)
+![Generic badge](https://img.shields.io/badge/os-Linux_|_MacOS_|_Windows-blue.svg)
+
+
+# [kitest](https://github.com/rtmigo/kitest_py)
+
+
+
+Tool for testing Kotlin libraries.
 
 The library is intentionally written in Python (although it tests Java/Kotlin). 
 This way we avoid modifying the Java framework on a clean system.

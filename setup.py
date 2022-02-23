@@ -4,8 +4,6 @@ from setuptools import setup, find_packages
 
 name = "kitest"
 
-readme = (Path(__file__).parent / 'README.md').read_text(encoding="utf-8")
-
 setup(
     name=name,
     version="0.0.0",
@@ -19,7 +17,8 @@ setup(
     python_requires='>=3.10',
     install_requires=[],
 
-    long_description=readme,
+    long_description=(Path(__file__).parent / 'README.md')
+        .read_text(encoding="utf-8"),
     long_description_content_type='text/markdown',
 
     license="MIT",
@@ -34,4 +33,3 @@ setup(
         "Operating System :: Microsoft :: Windows"
     ],
 )
-
