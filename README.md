@@ -1,4 +1,6 @@
-[![stability-experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](https://github.com/rtmigo)
+![Generic badge](https://img.shields.io/badge/stability-experimental-red.svg)
+![Generic badge](https://img.shields.io/badge/python-3.10-blue.svg)
+![Generic badge](https://img.shields.io/badge/os-Linux_|_MacOS_|_Windows-blue.svg)
 
 
 # [kitest](https://github.com/rtmigo/kitest_py)
