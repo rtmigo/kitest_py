@@ -1,22 +1,21 @@
 Tool for testing Kotlin libraries. I use it to test my own code.
 
 The library is intentionally written in Python (although it tests Java/Kotlin). 
-This
-way we avoid modifying the Java framework on a clean system.
-
-Examples of possible contents of `lib_test.py` are given below.
+This way we avoid modifying the Java framework on a clean system.
 
 ## AppWithGitDependency
 
-Suppose we have created a Kotlin library named `mylib`. The library is 
-located in the `https://github.com/username/mylib` repository and implements 
-the `io.github.username:mylib` module.
+Suppose you have created a Kotlin library named `mylib`. Full module name is
+`io.github.username:mylib`. It is located in the `https://github.com/username/mylib` 
+repository.
 
-There is a Kotlin function `spanishGreeting` in out library, that 
-returns `"¡Hola!"`
+The library contains function `spanishGreeting`, that returns `"¡Hola!"`
 
-To check if the library is successfully connected to third-party projects, 
-we create the following script: 
+You need to test that third-party projects can use `mylib` as a 
+dependency, downloading it directly from GitHub.
+
+
+Create the following script: 
 
 #### lib_test.py (or any name you like)
 
@@ -34,7 +33,7 @@ with AppWithGitDependency(
             fun main() = println(spanishGreeting())
         """) as app:
     
-    app.run().assert_output_is("¡Hola!\n")
+    app.run().assert_stdout_is("¡Hola!\n")
 
 print("Everything is OK!")
 ```
@@ -51,10 +50,10 @@ python lib_test.py
 
 ### Under the hood
 
-It will create a mini-project of a console application **miniApp** in Kotlin.
-The miniApp will include your library like this:
+It will create a small TestApp, that is a console application in Kotlin. TestApp
+will use your library like this:
 
-#### miniApp / settings.gradle.kts
+#### TestApp / settings.gradle.kts
 
 ```kotlin
 sourceControl {
@@ -64,7 +63,7 @@ sourceControl {
 }
 ```
 
-#### miniApp / build.gradle.kts
+#### TestApp / build.gradle.kts
 
 ```kotlin
 implementation("io.github.username:mylib")
