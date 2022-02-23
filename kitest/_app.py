@@ -67,7 +67,8 @@ class AppWithGitDependency:
 
         create_temp_project(src_template_name="dependency_from_github",
                             dst_dir=dst_dir,
-                            replacements={
+                            basename_replacements={},
+                            string_replacements={
                                 "__PACKAGE__": self.module,
                                 "__REPO_URL__": self.url,
                                 "__MAIN_KT__": self.main_kt,

@@ -17,11 +17,21 @@ def _header(txt: str, c: str) -> str:
     return f"{c}{c} {txt} ".ljust(80, c)
 
 
-def _replace_in_dir(parent: Path, replacements: dict[str, str]):
+
+
+def _replace_in_dir(parent: Path,
+                    string_replacements: dict[str, str],
+                    basename_replacements: dict[str, str],
+                    ):
     for p in parent.rglob('*'):
         if p.is_file():
             old_text = p.read_text()
-            new_text = _replace_in_string(old_text, replacements)
+
+            new_text = basename_replacements.get(p.name)
+            if new_text is None:
+                new_text = old_text
+
+            new_text = _replace_in_string(new_text, string_replacements)
             if new_text != old_text:
                 p.write_text(new_text)
 
@@ -34,11 +44,12 @@ def _replace_in_dir(parent: Path, replacements: dict[str, str]):
 
 def create_temp_project(src_template_name: str,
                         dst_dir: Path,
-                        replacements: dict[str, str]):
+                        string_replacements: dict[str, str],
+                        basename_replacements: dict[str, str]):
     src_dir = Path(__file__).parent / "data" / src_template_name
     if not src_dir.exists():
         raise FileNotFoundError(src_dir)
     if dst_dir.exists():
         raise FileExistsError(dst_dir)
     shutil.copytree(src_dir, dst_dir)
-    _replace_in_dir(dst_dir, replacements)
+    _replace_in_dir(dst_dir, string_replacements=string_replacements, basename_replacements=basename_replacements)
