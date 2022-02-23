@@ -1,6 +1,5 @@
-🚧 experimental 🚧
+[![stability-experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](https://github.com/rtmigo)
 
---------------------------------------------------------------------------------
 
 # [kitest](https://github.com/rtmigo/kitest_py)
 
