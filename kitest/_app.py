@@ -91,3 +91,4 @@ class AppWithGitDependency:
     def run(self) -> RunResult:
         output = _run_gradle(self.project_dir)
         return RunResult(output)
+
