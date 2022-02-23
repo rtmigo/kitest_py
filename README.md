@@ -9,8 +9,8 @@
 
 Tool for testing Kotlin libraries.
 
-The library is intentionally written in Python (although it tests Java/Kotlin). 
-This way we avoid modifying the Java framework on a clean system.
+`kitest` is written in Python (although it tests Java/Kotlin). This way we 
+avoid modifying the Java framework on a testing system.
 
 ## AppWithGitDependency
 
