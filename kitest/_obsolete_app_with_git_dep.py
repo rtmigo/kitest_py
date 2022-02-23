@@ -52,6 +52,7 @@ class AppWithGitDependency:
                  url: str,
                  module: str,
                  branch: Optional[str] = None):
+        warnings.warn("Obsolete", DeprecationWarning)
         self.main_kt = main_kt
         self.url = url
         self.module = module
