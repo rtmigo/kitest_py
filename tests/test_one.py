@@ -67,6 +67,7 @@ class TestAppGit(unittest.TestCase):
         self.assertEqual(result.stdout, "hello :)\n")
 
 
+
 class TestApp2Git(unittest.TestCase):
     def test_app2(self):
         with TempProject(

@@ -59,7 +59,7 @@ with TempProject(
 print("Everything is OK!")
 ```
 
-To run the test on a clean system, install `kitest` and run the script:
+To run the test on a clean system, install `tempp` and run the script:
 
 ```bash
 # assuming pip and python are Python 3.10+
