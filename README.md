@@ -8,7 +8,7 @@
 Cross-platform Python script that allows you to quickly create a directory 
 with files, run commands in it and check the results. 
 
-## Example: Testing Kotlin library
+## Example: Testing a Kotlin library
 
 Suppose you have created a Kotlin library named `mylib`. You need to test that 
 third-party projects can use `mylib` as a dependency.
