@@ -17,9 +17,9 @@ third-party projects can use `mylib` as a dependency.
 
 The test can be run by creating a single file like this:
 
-#### lib_test.py (or any name you like)
-
 ```python3
+# lib_test.py
+
 from kitest import *
 
 with TempGradleApp(
