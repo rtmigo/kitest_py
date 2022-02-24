@@ -9,7 +9,7 @@ from typing import List
 from kitest import RunResult
 
 
-class TempProject:
+class TempDirWith:
     def __init__(self,
                  files: dict[str, str],
                  # build_gradle_kts: str,
@@ -45,7 +45,7 @@ class TempProject:
             raise Exception("Unavailable")
         return self._temp_dir / "project"
 
-    def __enter__(self) -> TempProject:
+    def __enter__(self) -> TempDirWith:
         self._temp_dir = Path(tempfile.mkdtemp())
         self._create(self.project_dir)
         return self
