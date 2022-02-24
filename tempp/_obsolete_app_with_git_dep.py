@@ -10,8 +10,8 @@ from pathlib import Path
 from typing import Optional
 
 
-from kitest._dir_from_template import create_temp_project
-from kitest._gradle import _run_gradle, RunResult
+from tempp._dir_from_template import create_temp_project
+from tempp._gradle import _run_gradle, RunResult
 
 
 class AppWithGitDependency:

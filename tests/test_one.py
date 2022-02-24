@@ -5,9 +5,9 @@ import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from kitest._dir_from_template import create_temp_project
-from kitest._obsolete_app_with_git_dep import AppWithGitDependency
-from kitest._temp_kotlin_app import TempProject
+from tempp._dir_from_template import create_temp_project
+from tempp._obsolete_app_with_git_dep import AppWithGitDependency
+from tempp._temp_kotlin_app import TempProject
 
 
 class TestCreateProject(unittest.TestCase):

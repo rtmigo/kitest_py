@@ -25,7 +25,7 @@ def run():
 
     if a == "lint" or not a:
         print("Running mypy...")
-        package_dir_path = 'kitest'
+        package_dir_path = 'tempp'
         subprocess.check_call([sys.executable, '-m', 'mypy', package_dir_path,
                                '--pretty'])
 

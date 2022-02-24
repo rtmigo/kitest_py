@@ -3,7 +3,7 @@
 ![Generic badge](https://img.shields.io/badge/os-Linux_|_MacOS_|_Windows-blue.svg)
 
 
-# [kitest](https://github.com/rtmigo/kitest_py)
+# [tempp](https://github.com/rtmigo/tempp_py)
 
 Cross-platform Python script that allows you to quickly create a directory 
 with files, run commands in it and check the results. 
@@ -18,7 +18,7 @@ The test can be run by creating a single file like this:
 ```python3
 # lib_test.py
 
-from kitest import *
+from tempp import *
 
 with TempProject(
         files={

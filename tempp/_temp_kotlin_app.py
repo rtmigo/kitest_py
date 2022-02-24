@@ -6,7 +6,7 @@ import tempfile
 from pathlib import Path
 from typing import List
 
-from kitest import RunResult
+from tempp import RunResult
 
 
 class TempProject:
