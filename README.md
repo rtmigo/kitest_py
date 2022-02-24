@@ -53,6 +53,7 @@ with TempGradleApp(
             import io.github.username:mylib.spanishGreeting
             fun main() = println(spanishGreeting())
         """}) as app:
+    
     app.run().assert_stdout_is("¡Hola!\n")
 
 print("Everything is OK!")
