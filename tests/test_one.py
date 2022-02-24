@@ -7,7 +7,7 @@ from tempfile import TemporaryDirectory
 
 from kitest._dir_from_template import create_temp_project
 from kitest._obsolete_app_with_git_dep import AppWithGitDependency
-from kitest._temp_kotlin_app import TempDirWith
+from kitest._temp_kotlin_app import TempProject
 
 
 class TestCreateProject(unittest.TestCase):
@@ -69,7 +69,7 @@ class TestAppGit(unittest.TestCase):
 
 class TestApp2Git(unittest.TestCase):
     def test_app2(self):
-        with TempDirWith(
+        with TempProject(
                 files={
                     "build.gradle.kts": """
                         plugins {

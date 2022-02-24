@@ -20,7 +20,7 @@ The test can be run by creating a single file like this:
 
 from kitest import *
 
-with TempDirWith(
+with TempProject(
         files={
             # minimalistic build script to use the library
             "build.gradle.kts": """
@@ -50,9 +50,9 @@ with TempDirWith(
             "src/main/kotlin/Main.kt": """
                 import io.github.username:mylib.spanishGreeting
                 fun main() = println(spanishGreeting())
-            """}) as project_dir:
+            """}) as app:
     
-    result = project_dir.run(["gradle", "run", "-q"])
+    result = app.run(["gradle", "run", "-q"])
     assert result.returncode == 0
     assert result.stdout == "¡Hola!\n"
 
