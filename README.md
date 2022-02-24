@@ -65,7 +65,7 @@ To run the test on a clean system, install `kitest` and run the script:
 # assuming pip and python are Python 3.10+
 # and lib_test.py is a local file
 
-$ pip install git+https://github.com/rtmigo/kitest_py
+$ pip install git+https://github.com/rtmigo/tempp_py
 $ python lib_test.py
 ```
 
