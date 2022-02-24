@@ -75,18 +75,6 @@ It will create a small app in a temporary directory. The program will be
 executed with `gradle run -q`. Whatever the program prints
 out will be returned in the result object.
 
-## License
-
-Copyright © 2022 
-Artёm IG <github.com/rtmigo>
-
-Licensed under
-the [MIT License](https://github.com/rtmigo/kitest_py/blob/dev/LICENSE).
-
-Work on this library started on 22.02.2022 :)
-
 --------------------------------------------------------------------------------
 
-## Related repositories
-
-* [kitest_sample_kotlin_lib_kt](https://github.com/rtmigo/kitest_sample_kotlin_lib_kt)
+Work on this script started on 22.02.2022 :)
