@@ -5,9 +5,9 @@ import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from kitest._obsolete_app_with_git_dep import AppWithGitDependency
 from kitest._dir_from_template import create_temp_project
-from kitest._temp_kotlin_app import TempKotlinApp
+from kitest._obsolete_app_with_git_dep import AppWithGitDependency
+from kitest._temp_kotlin_app import TempGradleApp
 
 
 class TestCreateProject(unittest.TestCase):
@@ -69,33 +69,35 @@ class TestAppGit(unittest.TestCase):
 
 class TestApp2Git(unittest.TestCase):
     def test_app2(self):
-        with TempKotlinApp(
-                build_gradle_kts="""
-                    plugins {
-                        id("application")
-                        kotlin("jvm") version "1.6.10"
-                    }
-                    
-                    repositories { mavenCentral() }
-                    application { mainClass.set("MainKt") }
-                    
-                    dependencies {
-                        implementation("io.github.rtmigo:kitestsample")
-                    }            
-                """,
-
-                settings_gradle_kts="""
-                    sourceControl {
-                        gitRepository(java.net.URI("https://github.com/rtmigo/kitest_sample_kotlin_lib_kt.git")) {
-                            producesModule("io.github.rtmigo:kitestsample")
+        with TempGradleApp(
+                files={
+                    "build.gradle.kts": """
+                        plugins {
+                            id("application")
+                            kotlin("jvm") version "1.6.10"
                         }
-                    }            
-                """,
+                        
+                        repositories { mavenCentral() }
+                        application { mainClass.set("MainKt") }
+                        
+                        dependencies {
+                            implementation("io.github.rtmigo:kitestsample")
+                        }            
+                    """,
 
-                main_kt="""
-                    import io.github.rtmigo.kitestsample.*
-                    fun main() = println(greet())
-                """) as app:
+                    "settings.gradle.kts": """
+                        sourceControl {
+                            gitRepository(java.net.URI("https://github.com/rtmigo/kitest_sample_kotlin_lib_kt.git")) {
+                                producesModule("io.github.rtmigo:kitestsample")
+                            }
+                        }            
+                    """,
+
+                    "src/main/kotlin/Main.kt": """
+                        import io.github.rtmigo.kitestsample.*
+                        fun main() = println(greet())
+                    """}) as app:
+
             result = app.run()
 
         self.assertEqual(result.stdout, "hello :)\n")

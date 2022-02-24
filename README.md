@@ -5,28 +5,27 @@
 
 # [kitest](https://github.com/rtmigo/kitest_py)
 
-Tool for testing Kotlin libraries.
+Cross-platform Python script for testing Java/Kotlin libraries.
 
-`kitest` is written in Python (although it tests Java/Kotlin). This way we 
-avoid modifying the Java framework on a testing system.
+By using Python (instead of Java-based scripting languages), we avoid 
+modifying the Java framework on a testing system.
 
-## TempKotlinApp
+## Use
 
-Suppose you have created a Kotlin library named `mylib`. The library contains 
-function `spanishGreeting`, that returns `"¡Hola!"`.
+Suppose you have created a Kotlin library named `mylib`. You need to test that 
+third-party projects can use `mylib` as a dependency.
 
-You need to test that third-party projects can use `mylib` as a 
-dependency.
-
-The test can be run by creating a file like this:
+The test can be run by creating a single file like this:
 
 #### lib_test.py (or any name you like)
 
 ```python3
 from kitest import *
 
-with TempKotlinApp(
-        build_gradle_kts="""
+with TempGradleApp(
+    files={ 
+        # minimalistic build script to use the library
+        "build.gradle.kts": """
             plugins {
                 id("application")
                 kotlin("jvm") version "1.6.10"
@@ -39,21 +38,21 @@ with TempKotlinApp(
                 implementation("io.github.username:mylib")
             }            
         """,
-        
-        settings_gradle_kts="""
+
+        # additional settings, if necessary 
+        "settings.gradle.kts": """
             sourceControl {
                 gitRepository(java.net.URI("https://github.com/username/mylib.git")) {
                     producesModule("io.github.username:mylib")
                 }
             }            
         """,
-        
-        main_kt="""
-            // kotlin code that imports and uses the library        
+
+        # kotlin code that imports and uses the library
+        "src/main/kotlin/Main.kt": """
             import io.github.username:mylib.spanishGreeting
             fun main() = println(spanishGreeting())
-        """) as app:
-    
+        """}) as app:
     app.run().assert_stdout_is("¡Hola!\n")
 
 print("Everything is OK!")
