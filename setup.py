@@ -2,7 +2,7 @@ from pathlib import Path
 
 from setuptools import setup, find_packages
 
-name = "kitest"
+name = "tempp"
 
 setup(
     name=name,
@@ -11,8 +11,8 @@ setup(
     author="Artёm IG",
     author_email="ortemeo@gmail.com",
 
-    packages=find_packages(include=['kitest', 'kitest.*']),
-    package_data={'kitest': ['data' + ('/*' * i) for i in range(20)]},
+    packages=find_packages(include=['tempp', 'tempp.*']),
+    package_data={'tempp': ['data' + ('/*' * i) for i in range(20)]},
 
     python_requires='>=3.10',
     install_requires=[],
