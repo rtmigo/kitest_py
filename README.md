@@ -10,7 +10,7 @@ Cross-platform Python script for testing Java/Kotlin libraries.
 By using Python (instead of Java-based scripting languages), we avoid 
 modifying the Java framework on a testing system.
 
-## Use
+## Testing Kotlin library
 
 Suppose you have created a Kotlin library named `mylib`. You need to test that 
 third-party projects can use `mylib` as a dependency.
@@ -22,10 +22,10 @@ The test can be run by creating a single file like this:
 
 from kitest import *
 
-with TempGradleApp(
-    files={ 
-        # minimalistic build script to use the library
-        "build.gradle.kts": """
+with TempProject(
+        files={
+            # minimalistic build script to use the library
+            "build.gradle.kts": """
             plugins {
                 id("application")
                 kotlin("jvm") version "1.6.10"
@@ -39,8 +39,8 @@ with TempGradleApp(
             }            
         """,
 
-        # additional settings, if necessary 
-        "settings.gradle.kts": """
+            # additional settings, if necessary 
+            "settings.gradle.kts": """
             sourceControl {
                 gitRepository(java.net.URI("https://github.com/username/mylib.git")) {
                     producesModule("io.github.username:mylib")
@@ -48,13 +48,15 @@ with TempGradleApp(
             }            
         """,
 
-        # kotlin code that imports and uses the library
-        "src/main/kotlin/Main.kt": """
+            # kotlin code that imports and uses the library
+            "src/main/kotlin/Main.kt": """
             import io.github.username:mylib.spanishGreeting
             fun main() = println(spanishGreeting())
         """}) as app:
     
-    app.run().assert_stdout_is("¡Hola!\n")
+    result = app.run(["gradle", "run", "-q"])
+    assert result.returncode == 0    
+    assert result.stdout == "¡Hola!\n"
 
 print("Everything is OK!")
 ```
