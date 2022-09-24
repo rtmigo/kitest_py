@@ -21,7 +21,7 @@ class AppWithGitDependency:
                  module: str,
                  branch: Optional[str] = None):
         # todo used only by repr. Rewrite CI and remove
-        warnings.warn("Obsolete", DeprecationWarning)
+        warnings.warn("Obsolete 2022-09", DeprecationWarning)
         self.main_kt = main_kt
         self.url = url
         self.module = module
