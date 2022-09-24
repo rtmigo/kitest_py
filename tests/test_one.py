@@ -70,7 +70,6 @@ class TestAppGitObsolete(unittest.TestCase):
 
 
 class TestApp2GitObsolete(unittest.TestCase):
-
     # will fail if gradle is not installed
 
     def test_app2(self):
