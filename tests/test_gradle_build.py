@@ -42,6 +42,7 @@ class TestKotlin(unittest.TestCase):
                         import io.github.rtmigo.kitestsample.*
                         fun main() = println(greet())
                     """}) as app:
-            result = app.run([gradle_exe, "run", "-q"])
+            app.run([gradle_exe, "help"]) # warmup
+            result = app.run([gradle_exe, "run", "-q", "--no-daemon"])
 
         self.assertEqual(result.stdout, "hello :)\n")
