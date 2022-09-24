@@ -39,6 +39,8 @@ def _delete_ignoring_permission_errors(path: Path):
             shutil.rmtree(path)
         except PermissionError:
             # Happens on Windows, when deleting .git subdir.
+            # We cannot delete the whole `path`, but we can try to delete
+            # something inside of it.
             for sub in path.glob("*"):
                 _delete_ignoring_permission_errors(sub)
     else:
