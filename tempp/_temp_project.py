@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import inspect
-import os
 import shutil
 import subprocess
 import tempfile
@@ -9,6 +8,8 @@ import warnings
 from collections.abc import Iterable
 from pathlib import Path
 from typing import List
+
+from ._files import _rmtree_skipping_permission_errors
 
 
 class Glob:
@@ -31,23 +32,6 @@ class Glob:
                 shutil.copytree(p, abs_target)
             else:
                 shutil.copy(p, abs_target)
-
-
-def _delete_ignoring_permission_errors(path: Path):
-    if path.is_dir():
-        try:
-            shutil.rmtree(path)
-        except PermissionError:
-            # Happens on Windows, when deleting .git subdir.
-            # We cannot delete the whole `path`, but we can try to delete
-            # something inside of it.
-            for sub in path.glob("*"):
-                _delete_ignoring_permission_errors(sub)
-    else:
-        try:
-            os.remove(path)
-        except PermissionError:
-            pass
 
 
 class TempProject:
@@ -84,7 +68,7 @@ class TempProject:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         # TODO test files really removed
-        _delete_ignoring_permission_errors(self._temp_dir)
+        _rmtree_skipping_permission_errors(self._temp_dir)
 
     def print_files(self, unindent: bool = True):
         warnings.warn("Use print(tempp.files_content())", DeprecationWarning)
@@ -145,12 +129,32 @@ class CompletedRun:
     def __str__(self):
         class_name = self.__class__.__name__
         prefix = f"{self.__class__.__name__}."
-        return "\n\n".join((
+        lines = [
             _header(class_name),
-            f"{class_name}.args={self.args}",
-            f"{class_name}.returncode={self.returncode}",
-            _header(f"{class_name}.stdout"),
-            self.stdout,
-            _header(f"{class_name}.stderr"),
-            _header(f"end of {class_name}")
-        ))
+            f"{class_name}.args = {self.args}",
+            f"{class_name}.returncode = {self.returncode}"
+        ]
+
+        stdout_empty = self.stdout == ""
+        stderr_empty = self.stderr == ""
+
+        if stdout_empty:
+            lines.append(f"{class_name}.stdout is empty")
+        if stderr_empty:
+            lines.append(f"{class_name}.stderr is empty")
+
+        if not stdout_empty:
+            lines += [
+                _header(f"{class_name}.stdout"),
+                self.stdout,
+            ]
+
+        if not stderr_empty:
+            lines += [
+                _header(f"{class_name}.stderr"),
+                self.stderr,
+            ]
+
+        lines += [_header(f"end of {class_name}")]
+
+        return "\n\n".join(lines)
