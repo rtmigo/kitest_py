@@ -20,7 +20,10 @@ jobs:
 
     strategy:
       matrix:
-        os: [ ubuntu-latest, macos-latest  ] # , , windows-latest
+        # "macos-latest" disabled 2022-09 because of
+        "fatal: unable to connect to github.com"
+
+        os: [ ubuntu-latest, windows-latest  ] # macos-latest
         python-version: [ '3.10' ]
 
     steps:
@@ -39,7 +42,6 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          #git config --global url."https://${{ secrets.PRIVATE_REPOS_TOKEN }}@github".insteadOf https://github
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
