@@ -9,19 +9,19 @@ import warnings
 from pathlib import Path
 from typing import Optional
 
-
 from tempp._dir_from_template import create_temp_project
-from tempp._gradle import _run_gradle, RunResult
+from tempp._obsolete_gradle import _run_gradle, RunResult
 
 
 class AppWithGitDependency:
+
     def __init__(self,
                  main_kt: str,
                  url: str,
                  module: str,
                  branch: Optional[str] = None):
         # todo used only by repr. Rewrite CI and remove
-        warnings.warn("Obsolete", DeprecationWarning)
+        warnings.warn("Obsolete 2022-09", DeprecationWarning)
         self.main_kt = main_kt
         self.url = url
         self.module = module
@@ -62,4 +62,3 @@ class AppWithGitDependency:
     def run(self) -> RunResult:
         output = _run_gradle(self.project_dir)
         return RunResult(output)
-

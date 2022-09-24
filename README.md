@@ -1,4 +1,3 @@
-![Generic badge](https://img.shields.io/badge/stability-experimental-red.svg)
 ![Generic badge](https://img.shields.io/badge/python-3.10+-blue.svg)
 ![Generic badge](https://img.shields.io/badge/os-Linux_|_MacOS_|_Windows-blue.svg)
 
@@ -71,4 +70,4 @@ $ python lib_test.py
 
 --------------------------------------------------------------------------------
 
-Work on this script started on 22.02.2022 :)
+Work on this script started on 22.02.2022 

@@ -6,7 +6,7 @@ name = "tempp"
 
 setup(
     name=name,
-    version="0.1.1",
+    version="0.1.2",
 
     author="Artёm IG",
     author_email="ortemeo@gmail.com",
@@ -33,3 +33,4 @@ setup(
         "Operating System :: Microsoft :: Windows"
     ],
 )
+
