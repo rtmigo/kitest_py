@@ -6,8 +6,6 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 from tempp._dir_from_template import create_temp_project
-from tempp._obsolete_app_with_git_dep import AppWithGitDependency
-from tempp._temp_project import TempProject
 
 
 class TestCreateProject(unittest.TestCase):
@@ -28,79 +26,3 @@ class TestCreateProject(unittest.TestCase):
                 (project_root / "settings.gradle.kts").read_text())
 
 
-class TestAppGitObsolete(unittest.TestCase):
-
-    # will fail if gradle is not installed
-
-    def test_app_git_staging_branch(self):
-        with AppWithGitDependency(
-                module="io.github.user:repo",
-                url="https://github.com/user/repo",
-                branch="staging",
-                main_kt="""
-                    import io.github.user.repo.*
-                    fun main() = println(something())
-                """) as app:
-            self.assertIn(
-                """{ version { branch = "staging" } }""",
-                (app.project_dir / "build.gradle.kts").read_text())
-
-    def test_app_git_no_branch(self):
-        with AppWithGitDependency(
-                module="io.github.user:repo",
-                url="https://github.com/user/repo",
-                main_kt="""
-                    import io.github.user.repo.*
-                    fun main() = println(something())
-                """) as app:
-            self.assertNotIn(
-                "branch",
-                (app.project_dir / "build.gradle.kts").read_text())
-
-    def test_run(self):
-        with AppWithGitDependency(
-                module="io.github.rtmigo:kitestsample",
-                url="https://github.com/rtmigo/kitest_sample_kotlin_lib_kt",
-                main_kt="""
-                    import io.github.rtmigo.kitestsample.*
-                    fun main() = println(greet())
-                """) as app:
-            result = app.run()
-        self.assertEqual(result.stdout, "hello :)\n")
-
-
-class TestApp2GitObsolete(unittest.TestCase):
-    # will fail if gradle is not installed
-
-    def test_app2(self):
-        with TempProject(
-                files={
-                    "build.gradle.kts": """
-                        plugins {
-                            id("application")
-                            kotlin("jvm") version "1.6.10"
-                        }
-                        
-                        repositories { mavenCentral() }
-                        application { mainClass.set("MainKt") }
-                        
-                        dependencies {
-                            implementation("io.github.rtmigo:kitestsample")
-                        }            
-                    """,
-
-                    "settings.gradle.kts": """
-                        sourceControl {
-                            gitRepository(java.net.URI("https://github.com/rtmigo/kitest_sample_kotlin_lib_kt.git")) {
-                                producesModule("io.github.rtmigo:kitestsample")
-                            }
-                        }            
-                    """,
-
-                    "src/main/kotlin/Main.kt": """
-                        import io.github.rtmigo.kitestsample.*
-                        fun main() = println(greet())
-                    """}) as app:
-            result = app.run(["gradle", "run", "-q"])
-
-        self.assertEqual(result.stdout, "hello :)\n")

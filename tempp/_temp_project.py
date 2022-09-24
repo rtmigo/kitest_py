@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import inspect
+import os
 import shutil
 import subprocess
 import tempfile
+import warnings
 from collections.abc import Iterable
 from pathlib import Path
 from typing import List
@@ -29,6 +31,21 @@ class Glob:
                 shutil.copytree(p, abs_target)
             else:
                 shutil.copy(p, abs_target)
+
+
+def _delete_ignoring_permission_errors(path: Path):
+    if path.is_dir():
+        try:
+            shutil.rmtree(path)
+        except PermissionError:
+            # Happens on Windows, when deleting .git subdir.
+            for sub in path.glob("*"):
+                _delete_ignoring_permission_errors(sub)
+    else:
+        try:
+            os.remove(path)
+        except PermissionError:
+            pass
 
 
 class TempProject:
@@ -64,24 +81,74 @@ class TempProject:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        shutil.rmtree(self._temp_dir)
+        # TODO test files really removed
+        _delete_ignoring_permission_errors(self._temp_dir)
 
     def print_files(self, unindent: bool = True):
+        warnings.warn("Use print(tempp.files_content())", DeprecationWarning)
+        print(self.files_content(unindent=unindent))
+
+    def files_content(self, unindent: bool = True) -> str:
+        lines: list[str] = list()
+
+        def add_line(s: str):
+            lines.append(s)
+
         for file in sorted(self.project_dir.rglob("*")):
             if file.is_file():
-                print(("## " + str(file.relative_to(self.project_dir)) + " ")
-                      .ljust(80, "#"))
-                print()
+                add_line(
+                    _header(f'file "{file.relative_to(self.project_dir)}"'))
+                add_line("")
                 text = file.read_text()
                 if unindent:
                     text = inspect.cleandoc(text)
-                print(text)
-                print()
+                add_line(text)
+                add_line("")
+        add_line(_header("end of files"))
+        return "\n".join(lines)
 
-    def run(self, args: List[str]) -> subprocess.CompletedProcess:
+    def run(self, args: List[str]) -> CompletedRun:
         result = subprocess.run(args,
                                 cwd=self.project_dir,
                                 universal_newlines=True,
                                 # triggering text mode
                                 capture_output=True)
-        return result
+        return CompletedRun(result)
+
+
+def _header(text: str, width: int = 80) -> str:
+    return ("## " + text + " ").ljust(width, "#")
+
+
+class CompletedRun:
+    def __init__(self, cp: subprocess.CompletedProcess):
+        self.completed_process = cp
+
+    @property
+    def args(self):
+        return self.completed_process.args
+
+    @property
+    def returncode(self):
+        return self.completed_process.returncode
+
+    @property
+    def stdout(self):
+        return self.completed_process.stdout
+
+    @property
+    def stderr(self):
+        return self.completed_process.stderr
+
+    def __str__(self):
+        class_name = self.__class__.__name__
+        prefix = f"{self.__class__.__name__}."
+        return "\n\n".join((
+            _header(class_name),
+            f"{class_name}.args={self.args}",
+            f"{class_name}.returncode={self.returncode}",
+            _header(f"{class_name}.stdout"),
+            self.stdout,
+            _header(f"{class_name}.stderr"),
+            _header(f"end of {class_name}")
+        ))
