@@ -8,7 +8,7 @@ import neatest
 
 def git_push():
     cwd = Path(__file__).parent
-    branch = subprocess.check_output(["git", "branch"], cwd=cwd)\
+    branch = subprocess.check_output(["git", "branch"], cwd=cwd) \
         .decode().split()[-1]
     if branch != "dev":
         raise ValueError(f"Unexpected current GIT branch: {branch}")
@@ -32,9 +32,6 @@ def run():
     if a == "unit" or not a:
         neatest.run(verbosity=neatest.Verbosity.normal,
                     buffer=True)
-
-    # if not a:
-    #     git_push()
 
 
 if __name__ == "__main__":
