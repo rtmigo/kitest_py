@@ -72,21 +72,22 @@ class TempProject:
         print(self.files_content(unindent=unindent))
 
     def files_content(self, unindent: bool = True) -> str:
-        lines = list()
+        lines: list[str] = list()
 
-        def lp(s):
+        def add_line(s: str):
             lines.append(s)
 
         for file in sorted(self.project_dir.rglob("*")):
             if file.is_file():
-                lp(_header(f'file "{file.relative_to(self.project_dir)}"'))
-                lp("")
+                add_line(
+                    _header(f'file "{file.relative_to(self.project_dir)}"'))
+                add_line("")
                 text = file.read_text()
                 if unindent:
                     text = inspect.cleandoc(text)
-                lp(text)
-                lp("")
-        lp(_header("end of files"))
+                add_line(text)
+                add_line("")
+        add_line(_header("end of files"))
         return "\n".join(lines)
 
     def run(self, args: List[str]) -> CompletedRun:
