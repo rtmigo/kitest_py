@@ -25,6 +25,7 @@ def _run_gradle(project_dir: Path) -> subprocess.CompletedProcess:
 
 class RunResult:
     def __init__(self, cp: subprocess.CompletedProcess):
+        warnings.warn("Obsolete", DeprecationWarning)
         assert isinstance(cp.stdout, str)
         assert isinstance(cp.stderr, str)
         self.process = cp

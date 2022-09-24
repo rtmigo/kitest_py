@@ -2,12 +2,13 @@
 # SPDX-License-Identifier: MIT
 
 from pathlib import Path
-from ._obsolete_app_with_git_dep import AppWithGitDependency
-from ._gradle import RunResult
-from ._temp_project import TempProject
-from ._errors import UnexpectedOutput, GradleRunFailed
 
-assert (Path(__file__).parent/"data").exists()
-assert (Path(__file__).parent/"data"/"dependency_from_github").exists()
-assert (Path(__file__).parent/"data"/"dependency_from_github"
-        /"src"/"main"/"kotlin"/"Main.kt").exists()
+from ._errors import UnexpectedOutput  # , GradleRunFailed
+# from ._obsolete_app_with_git_dep import AppWithGitDependency
+# from ._obsolete_gradle import RunResult
+from ._temp_project import TempProject
+
+assert (Path(__file__).parent / "data").exists()
+assert (Path(__file__).parent / "data" / "dependency_from_github").exists()
+assert (Path(__file__).parent / "data" / "dependency_from_github"
+        / "src" / "main" / "kotlin" / "Main.kt").exists()

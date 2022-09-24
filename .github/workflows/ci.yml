@@ -56,7 +56,7 @@ jobs:
 
 
   test-pkg:
-    timeout-minutes: 15
+    timeout-minutes: 10
 
     runs-on: ${{ matrix.os }}
 
