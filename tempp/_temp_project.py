@@ -4,6 +4,7 @@ import inspect
 import shutil
 import subprocess
 import tempfile
+import warnings
 from collections.abc import Iterable
 from pathlib import Path
 from typing import List
@@ -67,21 +68,69 @@ class TempProject:
         shutil.rmtree(self._temp_dir)
 
     def print_files(self, unindent: bool = True):
+        warnings.warn("Use print(tempp.files_content())", DeprecationWarning)
+        print(self.files_content(unindent=unindent))
+
+    def files_content(self, unindent: bool = True) -> str:
+        lines = list()
+
+        def lp(s):
+            lines.append(s)
+
         for file in sorted(self.project_dir.rglob("*")):
             if file.is_file():
-                print(("## " + str(file.relative_to(self.project_dir)) + " ")
-                      .ljust(80, "#"))
-                print()
+                lp(_header(f'file "{file.relative_to(self.project_dir)}"'))
+                lp("")
                 text = file.read_text()
                 if unindent:
                     text = inspect.cleandoc(text)
-                print(text)
-                print()
+                lp(text)
+                lp("")
+        lp(_header("end of files"))
+        return "\n".join(lines)
 
-    def run(self, args: List[str]) -> subprocess.CompletedProcess:
+    def run(self, args: List[str]) -> CompletedRun:
         result = subprocess.run(args,
                                 cwd=self.project_dir,
                                 universal_newlines=True,
                                 # triggering text mode
                                 capture_output=True)
-        return result
+        return CompletedRun(result)
+
+
+def _header(text: str, width: int = 80) -> str:
+    return ("## " + text + " ").ljust(width, "#")
+
+
+class CompletedRun:
+    def __init__(self, cp: subprocess.CompletedProcess):
+        self.completed_process = cp
+
+    @property
+    def args(self):
+        return self.completed_process.args
+
+    @property
+    def returncode(self):
+        return self.completed_process.returncode
+
+    @property
+    def stdout(self):
+        return self.completed_process.stdout
+
+    @property
+    def stderr(self):
+        return self.completed_process.stderr
+
+    def __str__(self):
+        class_name = self.__class__.__name__
+        prefix = f"{self.__class__.__name__}."
+        return "\n\n".join((
+            _header(class_name),
+            f"{class_name}.args={self.args}",
+            f"{class_name}.returncode={self.returncode}",
+            _header(f"{class_name}.stdout"),
+            self.stdout,
+            _header(f"{class_name}.stderr"),
+            _header(f"end of {class_name}")
+        ))
