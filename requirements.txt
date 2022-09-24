@@ -2,4 +2,5 @@
 neatest
 chkpkg
 # 2022-02 Needed for `match`. Can be replaced with `mypy` when mypy is mypy 0.940 will be published PyPi
-git+git://github.com/python/mypy.git@9b3147701f054bf8ef42bd96e33153b05976a5e1
+# git+git://github.com/python/mypy.git@9b3147701f054bf8ef42bd96e33153b05976a5e1
+mypy
