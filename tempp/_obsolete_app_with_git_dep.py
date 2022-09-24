@@ -9,12 +9,12 @@ import warnings
 from pathlib import Path
 from typing import Optional
 
-
 from tempp._dir_from_template import create_temp_project
 from tempp._gradle import _run_gradle, RunResult
 
 
 class AppWithGitDependency:
+
     def __init__(self,
                  main_kt: str,
                  url: str,
@@ -62,4 +62,3 @@ class AppWithGitDependency:
     def run(self) -> RunResult:
         output = _run_gradle(self.project_dir)
         return RunResult(output)
-

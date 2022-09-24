@@ -4,20 +4,53 @@ import inspect
 import shutil
 import subprocess
 import tempfile
+from collections.abc import Iterable
 from pathlib import Path
 from typing import List
 
 
+class Glob:
+    def __init__(self,
+                 src_ref: Path,
+                 src_glob: str,
+                 dst_ref: Path):
+        self.src_glob = src_glob
+        self.dst = dst_ref
+        self.src_ref = src_ref
+
+    def copy(self):
+        # TODO unit test
+        if self.src_ref is None:
+            self.src_ref = Path(".").absolute()
+        for p in self.src_ref.rglob(self.src_glob):
+            abs_target = self.dst / p.relative_to(self.src_ref)
+            print(f"Copying {p} to {abs_target}")
+            if p.is_dir():
+                shutil.copytree(p, abs_target)
+            else:
+                shutil.copy(p, abs_target)
+
+
 class TempProject:
     def __init__(self,
-                 files: dict[str, str]):
+                 files: dict[str, str],
+                 copy: Iterable[Glob] | None = None):
         self.files = files
+        self.copy = copy
 
     def _create(self, dst_dir: Path):
         for fn, contents in self.files.items():
             full_fn = dst_dir / fn
             full_fn.parent.mkdir(parents=True, exist_ok=True)
             full_fn.write_text(contents)
+        if self.copy is not None:
+            # TODO unit test
+            for c in self.copy:
+                match c:
+                    case Glob():
+                        c.copy()
+                    case _:
+                        raise TypeError(c)
 
     @property
     def project_dir(self) -> Path:

@@ -4,7 +4,7 @@
 from pathlib import Path
 from ._obsolete_app_with_git_dep import AppWithGitDependency
 from ._gradle import RunResult
-from ._temp_kotlin_app import TempProject
+from ._temp_project import TempProject
 from ._errors import UnexpectedOutput, GradleRunFailed
 
 assert (Path(__file__).parent/"data").exists()

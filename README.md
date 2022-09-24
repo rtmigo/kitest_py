@@ -71,4 +71,4 @@ $ python lib_test.py
 
 --------------------------------------------------------------------------------
 
-Work on this script started on 22.02.2022 :)
+Work on this script started on 22.02.2022 

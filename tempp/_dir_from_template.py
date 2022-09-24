@@ -17,8 +17,6 @@ def _header(txt: str, c: str) -> str:
     return f"{c}{c} {txt} ".ljust(80, c)
 
 
-
-
 def _replace_in_dir(parent: Path,
                     string_replacements: dict[str, str],
                     basename_replacements: dict[str, str],
@@ -52,4 +50,5 @@ def create_temp_project(src_template_name: str,
     if dst_dir.exists():
         raise FileExistsError(dst_dir)
     shutil.copytree(src_dir, dst_dir)
-    _replace_in_dir(dst_dir, string_replacements=string_replacements, basename_replacements=basename_replacements)
+    _replace_in_dir(dst_dir, string_replacements=string_replacements,
+                    basename_replacements=basename_replacements)

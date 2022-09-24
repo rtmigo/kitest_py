@@ -7,7 +7,7 @@ from tempfile import TemporaryDirectory
 
 from tempp._dir_from_template import create_temp_project
 from tempp._obsolete_app_with_git_dep import AppWithGitDependency
-from tempp._temp_kotlin_app import TempProject
+from tempp._temp_project import TempProject
 
 
 class TestCreateProject(unittest.TestCase):
@@ -28,7 +28,9 @@ class TestCreateProject(unittest.TestCase):
                 (project_root / "settings.gradle.kts").read_text())
 
 
-class TestAppGit(unittest.TestCase):
+class TestAppGitObsolete(unittest.TestCase):
+
+    # will fail if gradle is not installed
 
     def test_app_git_staging_branch(self):
         with AppWithGitDependency(
@@ -67,8 +69,10 @@ class TestAppGit(unittest.TestCase):
         self.assertEqual(result.stdout, "hello :)\n")
 
 
+class TestApp2GitObsolete(unittest.TestCase):
 
-class TestApp2Git(unittest.TestCase):
+    # will fail if gradle is not installed
+
     def test_app2(self):
         with TempProject(
                 files={
@@ -98,7 +102,6 @@ class TestApp2Git(unittest.TestCase):
                         import io.github.rtmigo.kitestsample.*
                         fun main() = println(greet())
                     """}) as app:
-
             result = app.run(["gradle", "run", "-q"])
 
         self.assertEqual(result.stdout, "hello :)\n")
