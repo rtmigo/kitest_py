@@ -129,12 +129,32 @@ class CompletedRun:
     def __str__(self):
         class_name = self.__class__.__name__
         prefix = f"{self.__class__.__name__}."
-        return "\n\n".join((
+        lines = [
             _header(class_name),
-            f"{class_name}.args={self.args}",
-            f"{class_name}.returncode={self.returncode}",
-            _header(f"{class_name}.stdout"),
-            self.stdout,
-            _header(f"{class_name}.stderr"),
-            _header(f"end of {class_name}")
-        ))
+            f"{class_name}.args = {self.args}",
+            f"{class_name}.returncode = {self.returncode}"
+        ]
+
+        stdout_empty = self.stdout == ""
+        stderr_empty = self.stderr == ""
+
+        if stdout_empty:
+            lines.append(f"{class_name}.stdout is empty")
+        if stderr_empty:
+            lines.append(f"{class_name}.stderr is empty")
+
+        if not stdout_empty:
+            lines += [
+                _header(f"{class_name}.stdout"),
+                self.stdout,
+            ]
+
+        if not stderr_empty:
+            lines += [
+                _header(f"{class_name}.stderr"),
+                self.stderr,
+            ]
+
+        lines += [_header(f"end of {class_name}")]
+
+        return "\n\n".join(lines)

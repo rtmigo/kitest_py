@@ -6,6 +6,7 @@ from pathlib import Path
 
 
 def _rmtree_skipping_permission_errors(path: Path):
+    # TODO test
     if path.is_dir():
         try:
             shutil.rmtree(path)
