@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import inspect
+import os
 import shutil
 import subprocess
 import tempfile
@@ -30,6 +31,21 @@ class Glob:
                 shutil.copytree(p, abs_target)
             else:
                 shutil.copy(p, abs_target)
+
+
+def _delete_ignoring_permission_errors(path: Path):
+    if path.is_dir():
+        try:
+            shutil.rmtree(path)
+        except PermissionError:
+            # Happens on Windows, when deleting .git subdir.
+            for sub in path.glob("*"):
+                _delete_ignoring_permission_errors(sub)
+    else:
+        try:
+            os.remove(path)
+        except PermissionError:
+            pass
 
 
 class TempProject:
@@ -65,7 +81,8 @@ class TempProject:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        shutil.rmtree(self._temp_dir)
+        # TODO test files really removed
+        _delete_ignoring_permission_errors(self._temp_dir)
 
     def print_files(self, unindent: bool = True):
         warnings.warn("Use print(tempp.files_content())", DeprecationWarning)
