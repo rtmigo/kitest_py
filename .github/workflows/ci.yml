@@ -20,10 +20,9 @@ jobs:
 
     strategy:
       matrix:
-        # "macos-latest" disabled 2022-09 because of
-        # "fatal: unable to connect to github.com"
+        # "windows-latest" times out on Gradle builds
 
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        os: [ ubuntu-latest, macos-latest ]
         python-version: [ '3.10' ]
 
     steps:
