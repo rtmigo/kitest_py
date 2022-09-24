@@ -23,7 +23,7 @@ jobs:
         # "macos-latest" disabled 2022-09 because of
         # "fatal: unable to connect to github.com"
 
-        os: [ ubuntu-latest, windows-latest  ] # macos-latest
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
         python-version: [ '3.10' ]
 
     steps:
