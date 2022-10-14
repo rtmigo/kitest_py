@@ -1,8 +1,11 @@
 ![Generic badge](https://img.shields.io/badge/python-3.10+-blue.svg)
 ![Generic badge](https://img.shields.io/badge/os-Linux_|_MacOS_|_Windows-blue.svg)
 
-
 # [tempp](https://github.com/rtmigo/tempp_py)
+
+This package is obsolete. Replaced by **[tempground](https://github.com/rtmigo/tempground_py)**.
+
+--------------------------------------------------------------------------------
 
 Cross-platform Python script that allows you to quickly create a directory 
 with files, run commands in it and check the results. 
